@@ -1,5 +1,14 @@
 import React from 'react';
-import { AlertTriangle, CheckCircle2, Clock, FileWarning, Info, X } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CheckCircle2,
+  Clock,
+  FileWarning,
+  Info,
+  TrendingUp,
+  X,
+} from 'lucide-react';
 
 export const Panel: React.FC<{
   children: React.ReactNode;
@@ -47,27 +56,72 @@ export const MetricCard: React.FC<{
   value: string;
   detail?: string;
   tone?: 'neutral' | 'positive' | 'warning' | 'danger' | 'accent';
+  priority?: 'primary' | 'secondary';
+  statusHint?: string;
   onClick?: () => void;
-}> = ({ label, value, detail, tone = 'neutral', onClick }) => {
-  const toneClass =
+}> = ({
+  label,
+  value,
+  detail,
+  tone = 'neutral',
+  priority = 'primary',
+  statusHint,
+  onClick,
+}) => {
+  const toneValueClass =
     tone === 'positive'
-      ? 'text-emerald-700 dark:text-emerald-400'
+      ? 'text-[#228B22] dark:text-[#4ADE80]'
       : tone === 'warning'
       ? 'text-amber-700 dark:text-amber-400'
       : tone === 'danger'
       ? 'text-rose-700 dark:text-rose-400'
       : tone === 'accent'
-      ? 'text-teal-700 dark:text-teal-400'
+      ? 'text-[#1E293B] dark:text-[#28C76F]'
       : 'text-slate-900 dark:text-slate-50';
+
+  const surfaceToneClass =
+    tone === 'danger'
+      ? 'border-rose-200 bg-rose-50/40 dark:border-rose-900/60 dark:bg-rose-950/20'
+      : tone === 'warning' && priority === 'primary'
+      ? 'border-amber-200/90 bg-amber-50/30 dark:border-amber-900/50 dark:bg-amber-950/15'
+      : priority === 'secondary'
+      ? 'border-slate-200/80 bg-slate-50/60 dark:border-slate-800/80 dark:bg-slate-900/60'
+      : 'border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900';
+
+  const valueSizeClass =
+    priority === 'primary' ? 'text-2xl sm:text-[26px] font-bold' : 'text-lg sm:text-xl font-semibold';
+
+  const StateIcon =
+    tone === 'positive'
+      ? TrendingUp
+      : tone === 'warning'
+      ? Clock
+      : tone === 'danger'
+      ? AlertTriangle
+      : null;
 
   const content = (
     <>
-      <div className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</div>
-      <div className={`mt-2 font-mono text-2xl font-semibold tracking-tight tabular-nums ${toneClass}`}>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{label}</span>
+        {StateIcon && (
+          <StateIcon className={`h-3.5 w-3.5 shrink-0 ${toneValueClass}`} aria-hidden="true" />
+        )}
+      </div>
+      <div
+        className={`mt-2 font-mono tracking-tight tabular-nums ${valueSizeClass} ${toneValueClass}`}
+      >
         {value}
       </div>
-      {detail && (
-        <div className="mt-2 text-xs text-slate-600 dark:text-slate-400">{detail}</div>
+      {(detail || statusHint) && (
+        <div className="mt-2 flex items-center justify-between gap-2 text-xs text-slate-600 dark:text-slate-400">
+          <span className="truncate">{detail}</span>
+          {statusHint && (
+            <span className="inline-flex items-center gap-0.5 font-medium text-[#228B22] dark:text-[#28C76F] whitespace-nowrap shrink-0">
+              {statusHint}
+            </span>
+          )}
+        </div>
       )}
     </>
   );
@@ -77,16 +131,94 @@ export const MetricCard: React.FC<{
       <button
         type="button"
         onClick={onClick}
-        className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors hover:border-slate-300 hover:bg-slate-50/70 focus-visible:outline-2 focus-visible:outline-teal-600 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-slate-700 dark:hover:bg-slate-800/60"
+        className={`w-full rounded-xl border p-4 text-left transition-colors hover:border-slate-300 hover:bg-slate-50/90 focus-visible:outline-2 focus-visible:outline-[#228B22] dark:hover:border-slate-700 dark:hover:bg-slate-800/60 ${surfaceToneClass}`}
       >
         {content}
       </button>
     );
   }
 
+  return <div className={`rounded-xl border p-4 ${surfaceToneClass}`}>{content}</div>;
+};
+
+export interface AnalyticsSummaryStripProps {
+  situation: { label: string; value: string; tone?: 'neutral' | 'positive' | 'accent' };
+  change: { label: string; value: string; tone?: 'neutral' | 'positive' | 'warning' };
+  attention: { label: string; value: string; tone?: 'positive' | 'warning' | 'danger' };
+  nextAction: { label: string; actionText: string; onClick: () => void };
+}
+
+export const AnalyticsSummaryStrip: React.FC<AnalyticsSummaryStripProps> = ({
+  situation,
+  change,
+  attention,
+  nextAction,
+}) => {
+  const attentionToneCls =
+    attention.tone === 'danger'
+      ? 'text-rose-700 dark:text-rose-400'
+      : attention.tone === 'warning'
+      ? 'text-amber-700 dark:text-amber-400'
+      : 'text-[#228B22] dark:text-[#4ADE80]';
+
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-      {content}
+    <div
+      aria-label="Resumen analítico rápido"
+      className="grid grid-cols-1 divide-y divide-slate-200 rounded-xl border border-slate-200 bg-white dark:divide-slate-800 dark:border-slate-800 dark:bg-slate-900 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-4"
+    >
+      <div className="p-3.5 sm:p-4">
+        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          Situación actual
+        </div>
+        <div className="mt-1 font-display text-sm font-semibold text-slate-900 dark:text-slate-100">
+          {situation.value}
+        </div>
+        <div className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">{situation.label}</div>
+      </div>
+
+      <div className="p-3.5 sm:p-4">
+        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          Cambios relevantes
+        </div>
+        <div className="mt-1 font-display text-sm font-semibold text-slate-900 dark:text-slate-100">
+          {change.value}
+        </div>
+        <div className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">{change.label}</div>
+      </div>
+
+      <div className="p-3.5 sm:p-4">
+        <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+          Requiere atención
+        </div>
+        <div className={`mt-1 flex items-center gap-1.5 font-display text-sm font-semibold ${attentionToneCls}`}>
+          {attention.tone === 'danger' || attention.tone === 'warning' ? (
+            <AlertTriangle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          ) : (
+            <CheckCircle2 className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+          )}
+          <span>{attention.value}</span>
+        </div>
+        <div className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">{attention.label}</div>
+      </div>
+
+      <div className="flex items-center justify-between gap-3 bg-slate-50/70 p-3.5 dark:bg-slate-950/40 sm:p-4">
+        <div className="min-w-0">
+          <div className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+            Próxima acción
+          </div>
+          <div className="mt-0.5 truncate text-xs font-medium text-slate-800 dark:text-slate-200">
+            {nextAction.label}
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={nextAction.onClick}
+          className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg bg-[#1E293B] px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-[#228B22] dark:bg-[#228B22] dark:hover:bg-[#28C76F] whitespace-nowrap shrink-0"
+        >
+          <span>{nextAction.actionText}</span>
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+        </button>
+      </div>
     </div>
   );
 };
@@ -99,7 +231,7 @@ export const StatusLabel: React.FC<{
 }> = ({ text, tone = 'neutral' }) => {
   const config = {
     success: {
-      cls: 'text-emerald-700 dark:text-emerald-400',
+      cls: 'text-[#228B22] dark:text-[#4ADE80]',
       Icon: CheckCircle2,
     },
     warning: {

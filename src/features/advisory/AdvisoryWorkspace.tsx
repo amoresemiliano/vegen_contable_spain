@@ -10,6 +10,7 @@ import { canViewClientPersonalData } from '../../domain/rbac';
 import { computeTreasuryMetrics } from '../../domain/treasury';
 import { ENTITY_TYPE_LABELS, formatDateEs, formatEUR, round2 } from '../../domain/formatters';
 import {
+  AnalyticsSummaryStrip,
   EmptyState,
   LegalNoticeBanner,
   MetricCard,
@@ -252,28 +253,65 @@ export const AdvisoryWorkspace: React.FC<AdvisoryWorkspaceProps> = ({
           title="Panel de Asesoramiento Financiero"
           subtitle="Seguimiento de liquidez de cartera, objetivos en riesgo, reuniones próximas y publicación de planes."
         />
+
+        <AnalyticsSummaryStrip
+          situation={{
+            label: 'Entidades y patrimonio bajo seguimiento',
+            value: `${accessibleClients.length} carteras activas`,
+            tone: 'accent',
+          }}
+          change={{
+            label: 'Planes en borrador o revisión',
+            value: `${unpublishedPlans.length} pendiente(s) de publicar`,
+            tone: unpublishedPlans.length > 0 ? 'warning' : 'positive',
+          }}
+          attention={{
+            label: 'Desviación sobre aportación meta',
+            value:
+              atRiskGoals.length > 0
+                ? `${atRiskGoals.length} objetivo(s) en riesgo`
+                : 'Metas encauzadas',
+            tone: atRiskGoals.length > 0 ? 'danger' : 'positive',
+          }}
+          nextAction={{
+            label:
+              unpublishedPlans.length > 0
+                ? 'Revisar escenarios y publicar plan'
+                : 'Analizar diagnóstico financiero',
+            actionText: 'Abrir planificador',
+            onClick: () => onNavigate?.('planes'),
+          }}
+        />
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
+            priority="primary"
             label="Clientes asesorados"
             value={String(accessibleClients.length)}
             detail="Empresas, autónomos y particulares"
+            statusHint="Ver cartera"
             onClick={() => onNavigate?.('clientes')}
           />
           <MetricCard
+            priority="primary"
             label="Objetivos que requieren atención"
             value={String(atRiskGoals.length)}
             detail="Desviación respecto a cuota objetivo"
-            tone={atRiskGoals.length > 0 ? 'warning' : 'positive'}
+            tone={atRiskGoals.length > 0 ? 'danger' : 'positive'}
+            statusHint="Revisar metas"
             onClick={() => onNavigate?.('objetivos')}
           />
           <MetricCard
+            priority="primary"
             label="Planes pendientes de publicar"
             value={String(unpublishedPlans.length)}
             detail="Listos para revisión o envío"
             tone="accent"
+            statusHint="Planificar"
             onClick={() => onNavigate?.('planes')}
           />
           <MetricCard
+            priority="secondary"
             label="Próxima reunión"
             value={formatDateEs(clientProfile?.nextMeetingDate || '2026-11-28')}
             detail={client?.displayName}

@@ -5,6 +5,13 @@
   --font-display: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Vegen Digital Brand Tokens (vegendigital.com reference) */
+  --color-vegen-green: #28C76F;
+  --color-vegen-green-bright: #32CD32;
+  --color-vegen-green-dark: #228B22;
+  --color-vegen-slate: #1E293B;
+  --color-vegen-orange: #EA580C;
 }
 
 @layer base {

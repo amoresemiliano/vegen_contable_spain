@@ -15,10 +15,10 @@ export default defineConfig(() => {
         includeAssets: ['icon.svg', 'apple-touch-icon.png', 'pwa-192x192.png', 'pwa-512x512.png'],
         manifest: {
           id: '/',
-          name: 'VEGEN Finance Spain',
-          short_name: 'VEGEN',
+          name: 'Vegen Finance Hub',
+          short_name: 'Vegen Hub',
           description: 'Plataforma integral de contabilidad española, fiscalidad, tesorería y planificación financiera.',
-          theme_color: '#0F172A',
+          theme_color: '#1E293B',
           background_color: '#F8FAFC',
           display: 'standalone',
           start_url: '/',

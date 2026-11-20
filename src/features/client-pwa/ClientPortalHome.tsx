@@ -14,6 +14,7 @@ import { getClientEstimatedTaxLiability } from '../../domain/tax';
 import { computeGoalProgress } from '../../domain/planning';
 import { ENTITY_TYPE_LABELS, formatDateEs, formatEUR } from '../../domain/formatters';
 import {
+  AnalyticsSummaryStrip,
   MetricCard,
   PageHeader,
   Panel,
@@ -77,13 +78,14 @@ export const ClientPortalHome: React.FC<ClientPortalHomeProps> = ({ onNavigate }
     .filter((t) => t.clientId === client.id)
     .sort((a, b) => b.date.localeCompare(a.date))
     .slice(0, 5);
+  const pendingAttentionCount = openTasks.length + clientDocsPending.length;
 
   return (
     <div className="space-y-6">
       {/* Mobile-first Hero CTA */}
       <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="text-xs font-medium text-teal-700 dark:text-teal-400">
+          <div className="text-xs font-medium text-[#228B22] dark:text-[#4ADE80]">
             {ENTITY_TYPE_LABELS[client.entityType]} · {client.taxId}
           </div>
           <h1 className="mt-1 font-display text-xl font-bold text-slate-900 dark:text-slate-50 sm:text-2xl">
@@ -98,7 +100,7 @@ export const ClientPortalHome: React.FC<ClientPortalHomeProps> = ({ onNavigate }
           <button
             type="button"
             onClick={() => setUploadOpen(true)}
-            className="inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-teal-700 active:scale-[0.99] whitespace-nowrap shrink-0"
+            className="inline-flex min-h-[48px] items-center justify-center gap-2.5 rounded-xl bg-[#228B22] px-5 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#1b701b] active:scale-[0.99] whitespace-nowrap shrink-0"
           >
             <Camera className="h-5 w-5" />
             <span>Subir documento</span>
@@ -125,70 +127,119 @@ export const ClientPortalHome: React.FC<ClientPortalHomeProps> = ({ onNavigate }
         </div>
       )}
 
-      {/* 8 Primary Metric Cards distinguishing Liquidity, Cash, Profit & Tax */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <MetricCard
-          label="Liquidez disponible"
-          value={formatEUR(metrics.availableLiquidity)}
-          detail="Saldo libre inmediato"
-          tone="accent"
-          onClick={() => (can('treasury.read') ? onNavigate('bancos') : undefined)}
-        />
-        <MetricCard
-          label="Cobros esperados"
-          value={formatEUR(metrics.expectedCashInflows)}
-          detail={`${openInvoices.length} factura(s) pendientes`}
-          tone="positive"
-        />
-        <MetricCard
-          label="Pagos próximos"
-          value={formatEUR(metrics.upcomingPayables)}
-          detail="Proveedores por vencer"
-          tone="warning"
-        />
-        {!isIndividual ? (
+      {/* Analytics-First Situation Strip */}
+      <AnalyticsSummaryStrip
+        situation={{
+          label: 'Saldo libre inmediato',
+          value: formatEUR(metrics.availableLiquidity),
+          tone: 'accent',
+        }}
+        change={{
+          label: 'Flujo neto de caja del periodo',
+          value: formatEUR(metrics.netCashFlowPeriod),
+          tone: metrics.netCashFlowPeriod >= 0 ? 'positive' : 'warning',
+        }}
+        attention={{
+          label:
+            openTasks.length > 0
+              ? `${openTasks.length} solicitud(es) del despacho`
+              : clientDocsPending.length > 0
+              ? 'Documentos en revisión por gestoría'
+              : 'Sin incidencias abiertas',
+          value: pendingAttentionCount > 0 ? `${pendingAttentionCount} pendiente(s)` : 'Al día',
+          tone: openTasks.length > 0 ? 'danger' : clientDocsPending.length > 0 ? 'warning' : 'positive',
+        }}
+        nextAction={{
+          label: openTasks.length > 0 ? openTasks[0].title : 'Digitalizar factura o ticket',
+          actionText: openTasks.length > 0 ? 'Ver solicitud' : 'Subir doc.',
+          onClick: () => (openTasks.length > 0 ? onNavigate('mensajes') : setUploadOpen(true)),
+        }}
+      />
+
+      {/* Primary Metrics (Liquidity, Inflows, Payables, Tax) */}
+      <section aria-label="Indicadores principales" className="space-y-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
-            label="Impuestos estimados (Borrador)"
-            value={formatEUR(estTaxes)}
-            detail="Previsión 4T sin validez oficial"
-            tone={estTaxes > 0 ? 'warning' : 'neutral'}
-            onClick={() => (can('tax.drafts.generate') ? onNavigate('impuestos') : undefined)}
+            priority="primary"
+            label="Liquidez disponible"
+            value={formatEUR(metrics.availableLiquidity)}
+            detail="Saldo libre inmediato"
+            tone="accent"
+            statusHint={can('treasury.read') ? 'Ver tesorería' : undefined}
+            onClick={() => (can('treasury.read') ? onNavigate('bancos') : undefined)}
           />
-        ) : (
           <MetricCard
-            label="Saldo restringido"
-            value={formatEUR(metrics.restrictedCash)}
-            detail="Reservas asignadas"
+            priority="primary"
+            label="Cobros esperados"
+            value={formatEUR(metrics.expectedCashInflows)}
+            detail={`${openInvoices.length} factura(s) pendientes`}
+            tone="positive"
           />
-        )}
-        {!isIndividual && (
           <MetricCard
-            label="Resultado contable (Beneficio)"
-            value={formatEUR(metrics.accountingProfit)}
-            detail="Criterio devengo PGC (≠ Caja)"
-            onClick={() => (can('accounting.entries.read') ? onNavigate('contabilidad') : undefined)}
+            priority="primary"
+            label="Pagos próximos"
+            value={formatEUR(metrics.upcomingPayables)}
+            detail="Proveedores por vencer"
+            tone={metrics.upcomingPayables > 0 ? 'warning' : 'neutral'}
           />
-        )}
-        <MetricCard
-          label="Flujo neto de caja"
-          value={formatEUR(metrics.netCashFlowPeriod)}
-          detail="Entradas menos salidas"
-        />
-        <MetricCard
-          label="Docs / Solicitudes pendientes"
-          value={String(clientDocsPending.length + openTasks.length)}
-          detail={`${openTasks.length} solicitud(es) del asesor`}
-          tone={openTasks.length > 0 ? 'danger' : 'neutral'}
-          onClick={() => onNavigate('mensajes')}
-        />
-        <MetricCard
-          label="Cumplimiento de objetivos"
-          value={`${avgGoalProgress.toFixed(0)}%`}
-          detail={`${clientGoals.length} objetivo(s) activos`}
-          tone="positive"
-          onClick={() => onNavigate('objetivos')}
-        />
-      </div>
+          {!isIndividual ? (
+            <MetricCard
+              priority="primary"
+              label="Impuestos estimados (Borrador)"
+              value={formatEUR(estTaxes)}
+              detail="Previsión 4T sin validez oficial"
+              tone={estTaxes > 0 ? 'warning' : 'neutral'}
+              statusHint={can('tax.drafts.generate') ? 'Ver detalle' : undefined}
+              onClick={() => (can('tax.drafts.generate') ? onNavigate('impuestos') : undefined)}
+            />
+          ) : (
+            <MetricCard
+              priority="primary"
+              label="Saldo restringido"
+              value={formatEUR(metrics.restrictedCash)}
+              detail="Reservas asignadas"
+            />
+          )}
+        </div>
+
+        {/* Secondary Operational & Progress Metrics */}
+        <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {!isIndividual && (
+            <MetricCard
+              priority="secondary"
+              label="Resultado contable (Beneficio)"
+              value={formatEUR(metrics.accountingProfit)}
+              detail="Criterio devengo PGC (≠ Caja)"
+              tone={metrics.accountingProfit >= 0 ? 'positive' : 'danger'}
+              onClick={() => (can('accounting.entries.read') ? onNavigate('contabilidad') : undefined)}
+            />
+          )}
+          <MetricCard
+            priority="secondary"
+            label="Flujo neto de caja"
+            value={formatEUR(metrics.netCashFlowPeriod)}
+            detail="Entradas menos salidas"
+            tone={metrics.netCashFlowPeriod >= 0 ? 'positive' : 'warning'}
+          />
+          <MetricCard
+            priority="secondary"
+            label="Docs / Solicitudes pendientes"
+            value={String(pendingAttentionCount)}
+            detail={`${openTasks.length} solicitud(es) del asesor`}
+            tone={openTasks.length > 0 ? 'danger' : clientDocsPending.length > 0 ? 'warning' : 'neutral'}
+            statusHint={pendingAttentionCount > 0 ? 'Atender' : undefined}
+            onClick={() => onNavigate('mensajes')}
+          />
+          <MetricCard
+            priority="secondary"
+            label="Cumplimiento de objetivos"
+            value={`${avgGoalProgress.toFixed(0)}%`}
+            detail={`${clientGoals.length} objetivo(s) activos`}
+            tone="positive"
+            onClick={() => onNavigate('objetivos')}
+          />
+        </div>
+      </section>
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">

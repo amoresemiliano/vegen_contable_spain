@@ -217,7 +217,7 @@ export const FEATURE_STATUS_REGISTRY: FeatureRegistryItem[] = [
 ];
 
 export const SEED_ORGANIZATIONS: Organization[] = [
-  { id: 'org-platform', name: 'VEGEN Finance Spain Platform', type: OrganizationType.PLATFORM, taxId: 'DEMO-PLAT-00', city: 'Madrid', isDemo: true, createdAt: '2026-01-10' },
+  { id: 'org-platform', name: 'Vegen Finance Hub Platform', type: OrganizationType.PLATFORM, taxId: 'DEMO-PLAT-00', city: 'Madrid', isDemo: true, createdAt: '2026-01-10' },
   { id: 'org-firm-acc', name: 'Gestoría Ibérica Asesores SLP', type: OrganizationType.ACCOUNTING_FIRM, taxId: 'B-00009001 DEMO', city: 'Madrid', isDemo: true, createdAt: '2026-01-15' },
   { id: 'org-firm-adv', name: 'Patrimonia Vegen Asesores Financieros', type: OrganizationType.ADVISORY_FIRM, taxId: 'B-00009002 DEMO', city: 'Barcelona', isDemo: true, createdAt: '2026-01-15' },
   { id: 'org-client-a', name: 'VEGEN Digital SL', type: OrganizationType.CLIENT_ENTITY, taxId: 'B-00000001 DEMO', city: 'Madrid', isDemo: true, createdAt: '2026-02-01' },

@@ -23,6 +23,7 @@ import {
   round2,
 } from '../../domain/formatters';
 import {
+  AnalyticsSummaryStrip,
   EmptyState,
   MetricCard,
   ModalDialog,
@@ -212,32 +213,70 @@ export const AccountingWorkspace: React.FC<AccountingWorkspaceProps> = ({
           title="Panel de Gestoría y Cumplimiento"
           subtitle="Control operativo en tiempo real de clientes asignados, bandeja documental, conciliación y calendario fiscal."
         />
+
+        <AnalyticsSummaryStrip
+          situation={{
+            label: 'Cartera operativa asignada',
+            value: `${accessibleClients.length} clientes activos`,
+            tone: 'accent',
+          }}
+          change={{
+            label: 'Asientos pendientes de validación',
+            value: `${draftEntries.length} borrador(es)`,
+            tone: draftEntries.length > 0 ? 'warning' : 'positive',
+          }}
+          attention={{
+            label: `${pendingDocs.length} docs IA · ${pendingMatches.length} conciliaciones`,
+            value:
+              pendingDocs.length + pendingMatches.length > 0
+                ? `${pendingDocs.length + pendingMatches.length} por revisar`
+                : 'Sin bloqueos',
+            tone: pendingDocs.length + pendingMatches.length > 0 ? 'warning' : 'positive',
+          }}
+          nextAction={{
+            label:
+              pendingDocs.length > 0
+                ? 'Validar extracciones pendientes'
+                : 'Revisar conciliación bancaria',
+            actionText: pendingDocs.length > 0 ? 'Abrir bandeja' : 'Conciliar',
+            onClick: () => onNavigate?.(pendingDocs.length > 0 ? 'bandeja' : 'conciliacion'),
+          }}
+        />
+
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
+            priority="primary"
             label="Documentos por revisar"
             value={String(pendingDocs.length)}
             detail="Extracciones IA o posibles duplicados"
             tone={pendingDocs.length > 0 ? 'warning' : 'positive'}
-            onClick={() => onNavigate?.('documentos')}
+            statusHint="Revisar"
+            onClick={() => onNavigate?.('bandeja')}
           />
           <MetricCard
+            priority="primary"
             label="Conciliaciones pendientes"
             value={String(pendingMatches.length)}
             detail="Propuestas y excepciones bancarias"
             tone={pendingMatches.length > 0 ? 'warning' : 'positive'}
+            statusHint="Conciliar"
             onClick={() => onNavigate?.('conciliacion')}
           />
           <MetricCard
+            priority="secondary"
             label="Asientos en borrador"
             value={String(draftEntries.length)}
             detail="Pendientes de validación Debe = Haber"
+            statusHint="Ver diario"
             onClick={() => onNavigate?.('asientos')}
           />
           <MetricCard
+            priority="primary"
             label="Declaraciones en curso"
             value={String(pendingTaxes.length)}
             detail="Borradores 303 y obligaciones 4T 2026"
             tone="accent"
+            statusHint="Centro fiscal"
             onClick={() => onNavigate?.('declaraciones')}
           />
         </div>
@@ -248,8 +287,8 @@ export const AccountingWorkspace: React.FC<AccountingWorkspaceProps> = ({
               <h2 className="font-display text-base font-semibold">Cola prioritaria de revisión documental</h2>
               <button
                 type="button"
-                onClick={() => onNavigate?.('documentos')}
-                className="text-xs font-medium text-teal-700 hover:underline dark:text-teal-400"
+                onClick={() => onNavigate?.('bandeja')}
+                className="text-xs font-medium text-[#228B22] hover:underline dark:text-[#4ADE80]"
               >
                 Abrir bandeja
               </button>

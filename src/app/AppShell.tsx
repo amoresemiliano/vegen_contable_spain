@@ -50,6 +50,8 @@ import { CollaborationView } from '../features/collaboration/CollaborationView';
 import { AdminWorkspace } from '../features/admin/AdminWorkspace';
 import { OfflineIndicator, PWAInstallButton } from '../components/ui/PWAComponents';
 import { Panel } from '../components/ui/Surface';
+import { VegenLogo } from '../components/ui/VegenLogo';
+import { PersonaSelectorPopover } from '../components/ui/PersonaSelectorPopover';
 
 type WorkspaceKind = DemoPersona['workspaceKind'];
 
@@ -219,15 +221,6 @@ export const AppShell: React.FC = () => {
       ? 'Asesoría Financiera'
       : 'Administración y RBAC';
 
-  const WorkspaceIcon =
-    effectiveWorkspace === 'CLIENT_PWA'
-      ? Building2
-      : effectiveWorkspace === 'ACCOUNTING'
-      ? Calculator
-      : effectiveWorkspace === 'ADVISORY'
-      ? Compass
-      : Shield;
-
   const renderMainContent = () => {
     if (!selectedClient && effectiveWorkspace !== 'ADMIN') {
       return (
@@ -291,6 +284,7 @@ export const AppShell: React.FC = () => {
             />
           );
         case 'bandeja':
+        case 'documentos':
           return (
             <DocumentInboxView
               onNavigateToAccounting={() => setActiveRoute('asientos')}
@@ -380,18 +374,13 @@ export const AppShell: React.FC = () => {
           <button
             type="button"
             onClick={() => setShowEntryScreen(true)}
-            className="flex items-center gap-2 rounded-lg px-1.5 py-1 text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
-            title="Volver al selector de personas demo"
+            className="flex items-center rounded-lg px-1.5 py-1 text-left transition-colors hover:bg-slate-100 dark:hover:bg-slate-800"
+            title="Volver a la pantalla de acceso demo"
           >
-            <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-900 text-white dark:bg-teal-600">
-              <WorkspaceIcon className="h-4 w-4" />
-            </span>
-            <span className="font-display text-sm font-bold tracking-tight whitespace-nowrap">
-              VEGEN
-            </span>
+            <VegenLogo compact />
           </button>
 
-          <span className="hidden text-xs text-slate-400 sm:inline">·</span>
+          <span className="hidden text-xs text-slate-300 dark:text-slate-700 sm:inline">|</span>
           <span className="hidden truncate text-xs font-medium text-slate-600 dark:text-slate-300 sm:inline">
             {workspaceLabel}
           </span>
@@ -409,7 +398,7 @@ export const AppShell: React.FC = () => {
               aria-label="Seleccionar cliente activo"
               value={selectedClient?.id ?? ''}
               onChange={(e) => setSelectedClientId(e.target.value)}
-              className="hidden max-w-[180px] rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 sm:block"
+              className="hidden max-w-[175px] rounded-lg border border-slate-300 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 lg:block"
             >
               {accessibleClients.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -419,19 +408,11 @@ export const AppShell: React.FC = () => {
             </select>
           )}
 
-          {/* Quick Persona Switcher */}
-          <select
-            aria-label="Cambiar persona de demostración"
-            value={activePersona.id}
-            onChange={(e) => handleSwitchPersona(e.target.value)}
-            className="max-w-[155px] rounded-lg border border-slate-300 bg-white px-2 py-1.5 text-xs font-medium text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 sm:max-w-[210px]"
-          >
-            {state.personas.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.label}
-              </option>
-            ))}
-          </select>
+          {/* Compact Persona Selector Popover (Desktop & Mobile) */}
+          <PersonaSelectorPopover
+            onSelectPersona={handleSwitchPersona}
+            onReturnToLogin={() => setShowEntryScreen(true)}
+          />
 
           <div className="hidden sm:block">
             <PWAInstallButton compact />
@@ -452,7 +433,7 @@ export const AppShell: React.FC = () => {
         {/* Desktop Sidebar */}
         <aside className="sticky top-12 hidden h-[calc(100vh-3rem)] w-64 shrink-0 flex-col justify-between border-r border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900 md:flex">
           <div className="space-y-4 overflow-y-auto pr-1">
-            {/* Active role & workspace badge */}
+            {/* Active role & workspace summary */}
             <div className="rounded-xl border border-slate-200 bg-slate-50/70 p-3 text-xs dark:border-slate-800 dark:bg-slate-950/40">
               <div className="font-semibold text-slate-900 dark:text-slate-100 truncate">
                 {activePersona.label}
@@ -471,7 +452,7 @@ export const AppShell: React.FC = () => {
                       }}
                       className={`rounded px-2 py-1 text-[11px] font-medium ${
                         effectiveWorkspace === 'ACCOUNTING'
-                          ? 'bg-slate-900 text-white dark:bg-teal-600'
+                          ? 'bg-[#1E293B] text-white dark:bg-[#228B22]'
                           : 'bg-white text-slate-600 border border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300'
                       }`}
                     >
@@ -487,7 +468,7 @@ export const AppShell: React.FC = () => {
                       }}
                       className={`rounded px-2 py-1 text-[11px] font-medium ${
                         effectiveWorkspace === 'ADMIN'
-                          ? 'bg-slate-900 text-white dark:bg-teal-600'
+                          ? 'bg-[#1E293B] text-white dark:bg-[#228B22]'
                           : 'bg-white text-slate-600 border border-slate-200 dark:bg-slate-900 dark:border-slate-700 dark:text-slate-300'
                       }`}
                     >
@@ -503,7 +484,7 @@ export const AppShell: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setQuickUploadOpen(true)}
-                className="flex w-full min-h-[42px] items-center justify-center gap-2 rounded-xl bg-teal-600 px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-teal-700"
+                className="flex w-full min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#228B22] px-3 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#1b701b] dark:bg-[#228B22] dark:hover:bg-[#28C76F]"
               >
                 <Camera className="h-4 w-4" />
                 <span>Subir documento</span>
@@ -529,11 +510,11 @@ export const AppShell: React.FC = () => {
                       onClick={() => setActiveRoute(item.id)}
                       className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-xs font-medium transition-colors ${
                         active
-                          ? 'bg-teal-50 text-teal-800 dark:bg-teal-950/50 dark:text-teal-300'
+                          ? 'bg-[#28C76F]/12 text-[#228B22] dark:bg-[#28C76F]/15 dark:text-[#4ADE80]'
                           : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 dark:hover:text-slate-100'
                       }`}
                     >
-                      <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-teal-700 dark:text-teal-400' : 'text-slate-400'}`} />
+                      <Icon className={`h-4 w-4 shrink-0 ${active ? 'text-[#228B22] dark:text-[#4ADE80]' : 'text-slate-400'}`} />
                       <span className="truncate">{item.label}</span>
                     </button>
                   </React.Fragment>
@@ -548,16 +529,16 @@ export const AppShell: React.FC = () => {
               onClick={() => setShowEntryScreen(true)}
               className="w-full rounded-lg border border-slate-200 px-3 py-1.5 text-center font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
             >
-              Selector de personas y recorridos
+              Volver al acceso demo
             </button>
           </div>
         </aside>
 
         {/* Main Viewport */}
         <main className="min-w-0 flex-1 px-4 pb-24 pt-5 sm:px-6 lg:px-8 md:pb-10">
-          {/* Mobile quick client selector for multi-client users */}
+          {/* Quick client selector for multi-client users on small/tablet screens */}
           {accessibleClients.length > 1 && effectiveWorkspace !== 'ADMIN' && (
-            <div className="mb-4 sm:hidden">
+            <div className="mb-4 lg:hidden">
               <select
                 aria-label="Seleccionar cliente activo móvil"
                 value={selectedClient?.id ?? ''}
@@ -591,7 +572,7 @@ export const AppShell: React.FC = () => {
               type="button"
               onClick={() => setActiveRoute(item.id)}
               className={`flex min-w-[56px] flex-col items-center justify-center gap-0.5 py-1 text-[10px] font-medium ${
-                active ? 'text-teal-700 dark:text-teal-400' : 'text-slate-500 dark:text-slate-400'
+                active ? 'text-[#228B22] dark:text-[#4ADE80]' : 'text-slate-500 dark:text-slate-400'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -604,7 +585,7 @@ export const AppShell: React.FC = () => {
           <button
             type="button"
             onClick={() => setQuickUploadOpen(true)}
-            className="flex min-w-[64px] flex-col items-center justify-center gap-0.5 rounded-xl bg-teal-600 px-3 py-1.5 text-[10px] font-semibold text-white"
+            className="flex min-w-[64px] flex-col items-center justify-center gap-0.5 rounded-xl bg-[#228B22] px-3 py-1.5 text-[10px] font-semibold text-white"
           >
             <Camera className="h-4 w-4" />
             <span>Subir</span>
@@ -620,7 +601,7 @@ export const AppShell: React.FC = () => {
               type="button"
               onClick={() => setActiveRoute(item.id)}
               className={`flex min-w-[56px] flex-col items-center justify-center gap-0.5 py-1 text-[10px] font-medium ${
-                active ? 'text-teal-700 dark:text-teal-400' : 'text-slate-500 dark:text-slate-400'
+                active ? 'text-[#228B22] dark:text-[#4ADE80]' : 'text-slate-500 dark:text-slate-400'
               }`}
             >
               <Icon className="h-4 w-4" />
@@ -650,7 +631,7 @@ export const AppShell: React.FC = () => {
             <div className="space-y-3 overflow-y-auto">
               <div className="flex items-center justify-between border-b border-slate-200 pb-3 dark:border-slate-800">
                 <div>
-                  <div className="font-display text-sm font-bold">VEGEN Finance Spain</div>
+                  <div className="font-display text-sm font-bold">Vegen Finance Hub</div>
                   <div className="text-[11px] text-amber-700 dark:text-amber-400">ENTORNO DEMOSTRACIÓN</div>
                 </div>
                 <button
