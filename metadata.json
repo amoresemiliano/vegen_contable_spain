@@ -1,0 +1,6 @@
+{
+  "name": "VEGEN Finance Spain",
+  "description": "Plataforma SaaS integral de contabilidad, cumplimiento fiscal, gestión de tesorería y planificación financiera para España (MVP de demostración).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

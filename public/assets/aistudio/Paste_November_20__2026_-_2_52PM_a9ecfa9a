@@ -1,0 +1,1466 @@
+
+You are a senior multidisciplinary product engineering team consisting of:
+
+- SaaS Product Architect
+- Senior UX/UI Designer
+- React / TypeScript Engineer
+- PHP / MySQL Backend Architect
+- Spanish Accounting and Tax Domain Analyst
+- Financial Planning Systems Analyst
+- Security and Privacy Engineer
+- QA Engineer
+
+PROJECT NAME:
+VEGEN FINANCE SPAIN
+
+MISSION
+
+Design and build the first integrated, interactive MVP of a modern accounting, tax compliance, treasury management, and financial planning SaaS for Spain.
+
+The platform must connect three traditionally fragmented activities:
+
+1. Clients managing businesses, self-employment, or personal finances.
+2. Accounting and tax professionals responsible for bookkeeping, compliance, and tax declaration preparation.
+3. Financial advisors responsible for treasury analysis, wealth planning, financial goals, and financial scenarios.
+
+This is a new product, not a visual clone of Cegid Despachos.
+
+The supplied screenshots of Cegid are functional references for the existing operational domain. Use them to understand accounting reports, invoice processing, payroll, document management, and professional workflows.
+
+Do not copy Cegid's branding, proprietary visual design, or interface structure.
+
+PRODUCT OBJECTIVE
+
+Demonstrate an integrated financial operating platform in which:
+
+- Clients submit financial documents through simple workflows.
+- AI-assisted processing extracts and structures accounting information.
+- Accountants validate proposed accounting entries.
+- The system prepares applicable tax obligations and declaration drafts.
+- Bank transactions are imported and reconciled.
+- Accounting and treasury data feed financial planning.
+- Financial advisors create personalized financial scenarios and goal-based plans.
+- Clients monitor their business or personal financial position and progress toward goals.
+
+The first MVP will be evaluated by real accounting and financial professionals.
+
+It must be immediately understandable, visually compelling, and functionally interactive.
+
+Do not optimize primarily for backend complexity or infrastructure sophistication.
+
+Optimize for:
+- Working end-to-end workflows.
+- Clear business value.
+- Low operational friction.
+- Realistic synthetic data.
+- Excellent user experience.
+- Modular maintainability.
+- Minimal development and infrastructure cost.
+
+==================================================
+1. MVP BOUNDARY AND IMPLEMENTATION STRATEGY
+==================================================
+
+Build a complete, interactive product prototype with the major screens and workflows available for stakeholder review.
+
+This first phase uses synthetic data exclusively.
+
+The objective is to demonstrate functional behavior and validate the product with accountants and financial advisors before production implementation.
+
+Distinguish between:
+
+A. Functional prototype workflows:
+Real UI interaction with consistent synthetic application state.
+
+B. Simulated integrations:
+Clearly labeled demonstrations of workflows requiring external services.
+
+C. Production integrations:
+Explicitly excluded from this first phase unless already available and authorized.
+
+Never simulate a successful government filing, bank connection, WhatsApp transmission, or legally compliant tax submission.
+
+All prototype-generated tax documents must clearly display:
+"BORRADOR DE DEMOSTRACIÓN — SIN VALIDEZ TRIBUTARIA".
+
+All prototype-generated invoices must clearly display:
+"DOCUMENTO DE DEMOSTRACIÓN — NO VÁLIDO PARA FACTURACIÓN REAL".
+
+Create a centralized demo data service and persistence abstraction.
+
+Avoid scattered hardcoded data in individual components.
+
+All screens must reflect the same underlying synthetic records.
+
+For example, changing an invoice classification must update the relevant accounting records, reporting views, and tax projections within the prototype.
+
+Do not create a fake backend simply to imitate an API.
+
+Use a clearly separated prototype data adapter first.
+
+Prepare, but do not prematurely implement, the production adapter for the PHP/MySQL API.
+
+Do not create cloud infrastructure, databases, secrets, or external accounts during this phase.
+
+==================================================
+2. TARGET USERS AND ORGANIZATIONS
+==================================================
+
+Support the following client types:
+
+- Spanish limited liability companies (SL).
+- Other business organizations.
+- Self-employed professionals (autónomos).
+- Individual consumers.
+- Business owners who also receive personal financial advice.
+
+The long-term architecture must support multiple independent accounting firms and financial advisory organizations.
+
+A client may be served by:
+- One accounting firm.
+- One or several assigned accountants.
+- One financial advisory organization.
+- One or several assigned financial advisors.
+
+Accounting and financial professionals must only access client information covered by their assignments and permissions.
+
+Business and personal financial records must remain legally and logically separated.
+
+A unified financial planning view may combine information only when authorized, with explicit distinctions between business assets, personal assets, business liabilities, and personal liabilities.
+
+==================================================
+3. ROLES AND PERMISSION ARCHITECTURE
+==================================================
+
+Provide six initial roles:
+
+1. PLATFORM_SUPERADMIN
+2. FIRM_ADMIN
+3. ACCOUNTANT
+4. FINANCIAL_ADVISOR
+5. CLIENT_ADMIN
+6. CLIENT_COLLABORATOR
+
+Do not implement authorization using only hardcoded role checks.
+
+Design a flexible RBAC permission system supporting:
+
+- Role creation.
+- Role editing.
+- Permission assignment.
+- Role cloning.
+- User-to-role assignment.
+- Organization-scoped permissions.
+- Client-specific access.
+- Individual functional permissions.
+- Read, create, update, approve, export, and delete actions.
+- Restriction of sensitive financial and personal data.
+- Full audit visibility for privileged actions.
+
+Example permissions:
+
+documents.upload
+documents.read
+documents.review
+accounting.entries.create
+accounting.entries.approve
+accounting.reports.read
+tax.obligations.manage
+tax.drafts.generate
+tax.drafts.approve
+treasury.transactions.import
+treasury.reconciliation.approve
+finance.plans.create
+finance.plans.publish
+finance.personal.read
+users.manage
+roles.manage
+audit.read
+
+Provide a working role and permissions management UI.
+
+In the MVP, permissions must affect navigation and permitted actions, not merely appear as decorative configuration.
+
+Use role-specific demo sessions to switch between personas.
+
+==================================================
+4. PRODUCT INFORMATION ARCHITECTURE
+==================================================
+
+Build three clearly differentiated application experiences sharing a common design system.
+
+A. CLIENT PORTAL / PWA
+
+Main navigation:
+
+- Inicio
+- Documentos
+- Facturas
+- Bancos y Tesorería
+- Contabilidad
+- Impuestos
+- Objetivos
+- Mi Plan Financiero
+- Mensajes y Solicitudes
+- Perfil y Configuración
+
+Display relevant modules conditionally according to client type and permissions.
+
+B. ACCOUNTING AND TAX PROFESSIONAL WORKSPACE
+
+Main navigation:
+
+- Panel de Gestoría
+- Cartera de Clientes
+- Bandeja de Documentos
+- Facturas
+- Asientos Contables
+- Plan Contable
+- Libros Contables
+- Conciliación
+- Obligaciones Fiscales
+- Declaraciones
+- Informes
+- Incidencias y Solicitudes
+- Auditoría
+
+C. FINANCIAL ADVISOR WORKSPACE
+
+Main navigation:
+
+- Panel Financiero
+- Cartera de Clientes
+- Diagnóstico Financiero
+- Tesorería y Liquidez
+- Patrimonio
+- Presupuestos
+- Objetivos
+- Planes Financieros
+- Escenarios
+- Inversiones
+- Seguimiento
+- Informes
+- Comunicación con Clientes
+
+D. SHARED ADMINISTRATION
+
+- Organizations
+- Users
+- Roles and Permissions
+- Professional Assignments
+- Client Invitations
+- System Configuration
+- Audit Logs
+- Demo Data Management
+
+The platform superadmin controls system-level configuration.
+
+Firm administrators control their own organizational scope only.
+
+==================================================
+5. CLIENT PORTAL — MOBILE-FIRST EXPERIENCE
+==================================================
+
+Design a premium PWA optimized for mobile usage.
+
+Clients should be able to complete their primary tasks with minimal friction.
+
+The client dashboard must immediately answer:
+
+- How much money is available?
+- How much money is expected to arrive?
+- What payments are upcoming?
+- What taxes are approaching?
+- Is the business profitable?
+- What documents require attention?
+- Are financial goals progressing as planned?
+
+Build a strong visual hierarchy.
+
+Primary cards:
+
+Available liquidity
+Expected cash inflows
+Upcoming payments
+Estimated tax obligations
+Accounting profit
+Net cash flow
+Outstanding invoices
+Goal completion
+
+Use clear labels distinguishing profit, cash, and projected obligations.
+
+Include:
+
+- Notifications.
+- Pending actions.
+- Recent financial activity.
+- Financial trends.
+- Goal progress.
+- Quick document upload.
+- Requests from the accountant.
+- Published financial plans.
+
+The most important mobile action is:
+
+"Subir documento"
+
+Make this action prominent and accessible from the main navigation.
+
+Support:
+
+- Camera capture.
+- Photo upload.
+- PDF upload.
+- Multiple files.
+- Upload progress.
+- Document preview.
+- Document type selection.
+- Submission confirmation.
+- Processing status.
+- Error handling.
+
+A client should be able to upload a document without understanding accounting terminology.
+
+Provide an accessible bottom navigation bar for mobile users.
+
+All significant interactions must remain usable on touchscreens.
+
+==================================================
+6. DOCUMENT MANAGEMENT AND AI EXTRACTION
+==================================================
+
+Build a document processing pipeline with the following states:
+
+UPLOADED
+PROCESSING
+EXTRACTED
+NEEDS_REVIEW
+APPROVED
+ACCOUNTED
+REJECTED
+ARCHIVED
+
+Document types include:
+
+- Supplier invoices.
+- Customer invoices.
+- Credit notes.
+- Expense receipts.
+- Bank statements.
+- Contracts.
+- Payroll documents.
+- Tax documents.
+- Other attachments.
+
+For every document, store structured metadata:
+
+- Organization.
+- Client.
+- Document type.
+- Original filename.
+- Upload timestamp.
+- Uploader.
+- Source channel.
+- Accounting period.
+- Processing status.
+- Review status.
+- Linked accounting entry.
+- Audit history.
+
+Demonstrate AI-assisted extraction of:
+
+- Supplier or customer name.
+- Tax identification.
+- Invoice number.
+- Invoice date.
+- Due date.
+- Currency.
+- Taxable amount.
+- VAT rates.
+- VAT amounts.
+- Withholding amounts.
+- Total amount.
+- Payment method.
+- Description.
+- Suggested accounting category.
+- Suggested chart-of-accounts code.
+
+Display extracted fields beside a document preview.
+
+Highlight uncertain fields.
+
+Provide a confidence indicator without treating it as proof of correctness.
+
+Enable the accountant to:
+
+- Correct extracted information.
+- Approve or reject proposals.
+- Detect duplicate invoice candidates.
+- Resolve missing information.
+- Assign accounts.
+- Confirm tax treatment.
+- Generate draft journal entries.
+- View the history of corrections.
+
+Demonstrate learning from corrections through an explicit rules/preference mechanism.
+
+Do not claim that the underlying AI model has been retrained.
+
+PROCESSING CHANNELS
+
+Design the system to support:
+
+- Direct uploads.
+- PDF uploads.
+- Images.
+- CSV.
+- Excel.
+- Email ingestion.
+- WhatsApp Business ingestion.
+- Future API integrations.
+
+Implement direct upload and synthetic file processing demonstrations first.
+
+For email and WhatsApp, create realistic channel configuration screens and simulated inbox examples.
+
+Clearly label these integrations as not connected.
+
+Do not invent webhook endpoints or claim messages were received from real external services.
+
+==================================================
+7. ACCOUNTING ENGINE
+==================================================
+
+Design a Spanish accounting domain based on double-entry bookkeeping.
+
+Use the Spanish General Accounting Plan as the conceptual foundation.
+
+The accounting system must support:
+
+- Chart of accounts.
+- Accounts and subaccounts.
+- Accounting periods.
+- Opening balances.
+- Journal entries.
+- Debit and credit lines.
+- Account movements.
+- General ledger.
+- VAT books.
+- Trial balance.
+- Profit and loss.
+- Balance sheet.
+- Financial statements.
+- Period closing.
+- Corrections and adjustments.
+- Traceability to source documents.
+
+Never treat an invoice total as automatically equivalent to revenue or expense.
+
+Distinguish:
+- Taxable base.
+- Tax.
+- Withholding.
+- Receivables and payables.
+- Cash movements.
+- Accrual accounting.
+- Accounting result.
+
+Journal entries must balance.
+
+Provide a validation rule:
+
+Total debit = total credit.
+
+An unbalanced entry cannot be approved.
+
+Create accounting entry states:
+
+DRAFT
+PROPOSED
+UNDER_REVIEW
+APPROVED
+POSTED
+REVERSED
+
+Posted entries must not be silently overwritten.
+
+Corrections must preserve an audit trail.
+
+Accounting period closures should be demonstrable.
+
+Provide a professional accounting workspace with:
+
+- Journal entry table.
+- Search.
+- Date filters.
+- Account filters.
+- Status filters.
+- Document links.
+- Side-panel entry details.
+- Draft editing.
+- Approval workflow.
+- Account balance exploration.
+
+Support export previews for PDF and CSV where feasible.
+
+==================================================
+8. TAX OBLIGATIONS AND DECLARATION CENTER
+==================================================
+
+Create a rules-based tax obligations engine.
+
+The obligation profile of each client may depend on:
+
+- Legal entity type.
+- Business activities.
+- Tax regime.
+- VAT regime.
+- Employees.
+- Professional fees.
+- Property rentals.
+- Intracommunity operations.
+- Applicable census information.
+- Other verified tax obligations.
+
+The platform must propose applicable obligations.
+
+The accountant must review and approve the client obligation profile.
+
+Include an extensible catalog for common Spanish models:
+
+036
+111
+115
+123
+180
+190
+193
+200
+202
+216
+232
+296
+303
+347
+349
+390
+720
+840
+848
+
+Not every model applies to every client.
+
+Never automatically mark a tax form as mandatory solely because it exists in the catalog.
+
+Create a tax model registry containing:
+
+- Model number.
+- Official name.
+- Tax category.
+- Filing frequency.
+- Applicability criteria.
+- Reporting period.
+- Due date.
+- Official source URL.
+- Rule version.
+- Validation status.
+- Required underlying information.
+- Available export format.
+- Professional approval requirements.
+
+Do not invent legal rules or deadlines.
+
+Use verified rules only.
+
+For unverified rules, display:
+
+"PENDIENTE DE VALIDACIÓN NORMATIVA".
+
+The first functional tax calculation scenario should focus on a simplified standard VAT case using Model 303.
+
+The demo should calculate VAT collected, deductible VAT, and a simplified indicative net balance using synthetic invoices.
+
+Exclude special regimes from automatic calculations until verified.
+
+Include visual draft templates for other common tax forms.
+
+These may show required sections and linked source records without pretending that their complete official calculation logic is implemented.
+
+DECLARATION WORKFLOW
+
+1. Obligation identified.
+2. Required period selected.
+3. Accounting data checked.
+4. Missing data detected.
+5. Draft generated.
+6. Accountant reviews.
+7. Accountant approves.
+8. Ready for external filing.
+9. Filing evidence manually recorded.
+
+The MVP must never claim to submit declarations to AEAT.
+
+Support manual attachment of a synthetic filing receipt for demonstration.
+
+Use clear statuses:
+
+PENDING_DATA
+READY_TO_PREPARE
+DRAFT
+NEEDS_REVIEW
+APPROVED
+READY_FOR_EXTERNAL_FILING
+FILED_EXTERNALLY
+OVERDUE
+
+A declaration should link back to the transactions and accounting records used to prepare it.
+
+Provide a quarterly and annual tax calendar.
+
+Show deadlines, unresolved documentation, and estimated liabilities.
+
+Implement professional dashboards organized by:
+
+- Client.
+- Tax model.
+- Filing period.
+- Due date.
+- Completeness.
+- Accountant assignment.
+- Review status.
+
+==================================================
+9. INVOICING MODULE
+==================================================
+
+Provide an interactive invoice management workspace.
+
+Include:
+
+- Customers.
+- Suppliers.
+- Quotes.
+- Draft invoices.
+- Invoice items.
+- Tax calculations.
+- Discounts.
+- Due dates.
+- Payment terms.
+- Credit notes.
+- Recurring invoice templates.
+- Invoice history.
+- PDF preview.
+
+Users must be able to create and edit synthetic draft invoices.
+
+Invoice creation must use structured data.
+
+Do not claim legal compliance with VERI*FACTU, Spanish electronic invoicing obligations, or other production invoicing standards.
+
+Production invoice issuance must remain disabled until the applicable legal, technical, integrity, retention, and compliance requirements are implemented and verified.
+
+Every demonstration invoice must be clearly identified as non-valid for real invoicing.
+
+Avoid implementing fake compliance features.
+
+Prepare an isolated invoicing compliance boundary for future work.
+
+==================================================
+10. BANKING AND TREASURY
+==================================================
+
+Build a treasury workspace supporting multiple bank accounts per client.
+
+In the MVP, support:
+
+- Synthetic bank accounts.
+- Import of example CSV files.
+- Bank transaction listing.
+- Transaction categorization.
+- Bank balances.
+- Cash inflows.
+- Cash outflows.
+- Receivables.
+- Payables.
+- Cash flow forecast.
+- Reconciliation proposals.
+- Manual reconciliation.
+- Reconciliation exceptions.
+
+Do not connect real bank accounts.
+
+For CSV imports, provide:
+
+- File preview.
+- Column mapping.
+- Date normalization.
+- Debit/credit interpretation.
+- Duplicate detection.
+- Import confirmation.
+- Validation errors.
+
+Support transaction-to-invoice matching using deterministic rules such as:
+
+- Amount.
+- Date tolerance.
+- Invoice reference.
+- Counterparty.
+- Description.
+
+Do not silently reconcile ambiguous transactions.
+
+Require professional approval for uncertain matches.
+
+Distinguish:
+
+ACCOUNTING PROFIT
+CASH BALANCE
+AVAILABLE LIQUIDITY
+EXPECTED CASH
+RESTRICTED CASH
+FORECAST CASH FLOW
+
+These metrics must not be presented as interchangeable.
+
+Provide treasury forecasts at:
+
+30 days
+60 days
+90 days
+12 months
+
+Use synthetic but internally consistent values.
+
+==================================================
+11. FINANCIAL ADVISORY WORKSPACE
+==================================================
+
+Build a dedicated advisor experience.
+
+This must not be a superficial copy of the client dashboard.
+
+It should provide professional tools for managing clients and preparing financial plans.
+
+ADVISOR DASHBOARD
+
+Include:
+
+- Assigned clients.
+- Pending financial reviews.
+- Client liquidity alerts.
+- Goals requiring attention.
+- Plans awaiting publication.
+- Upcoming client meetings.
+- Recently updated financial data.
+- Risk indicators.
+- Portfolio overview.
+
+CLIENT FINANCIAL PROFILE
+
+Support:
+
+- Individual or business profile.
+- Financial objectives.
+- Income sources.
+- Expenses.
+- Assets.
+- Liabilities.
+- Available liquidity.
+- Savings capacity.
+- Financing obligations.
+- Financial planning horizon.
+- Risk tolerance information.
+- Existing investment holdings entered manually.
+- Emergency reserves.
+- Relevant financial constraints.
+
+BUSINESS FINANCIAL PLANNING
+
+Include:
+
+- Working capital.
+- Cash runway.
+- Profitability.
+- Financing needs.
+- Investment in equipment.
+- Growth financing.
+- Debt reduction.
+- Reserve targets.
+- Cash availability scenarios.
+- Expansion scenarios.
+
+PERSONAL FINANCIAL PLANNING
+
+Include:
+
+- Monthly budget.
+- Emergency fund.
+- Home purchase.
+- Education funding.
+- Retirement savings.
+- Long-term goals.
+- Debt repayment.
+- Family financial planning.
+- Wealth tracking.
+
+Allow business owners to view separately authorized personal and business information in a consolidated advisory context.
+
+Never mix ownership or financial obligations between entities.
+
+FINANCIAL PLAN BUILDER
+
+Provide an interactive editor where the advisor can:
+
+1. Select a client.
+2. Review the financial baseline.
+3. Create goals.
+4. Define assumptions.
+5. Set time horizons.
+6. Create scenarios.
+7. Compare outcomes.
+8. Add explanatory notes.
+9. Prepare an advisory report.
+10. Publish the plan to the client.
+
+Include at least three scenarios:
+
+CONSERVATIVE
+BASE
+OPTIMISTIC
+
+Show how assumptions influence projected outcomes.
+
+Do not present assumptions as guaranteed results.
+
+Do not provide automatic personalized securities recommendations or investment execution.
+
+Allow professionals to document financial planning considerations without implying regulatory authorization.
+
+==================================================
+12. GOALS AND PROGRESS TRACKING
+==================================================
+
+Goals are a fundamental feature of the product.
+
+Build a goal management system usable by both clients and professionals.
+
+Goal examples:
+
+- Save EUR 20,000.
+- Build a six-month emergency fund.
+- Purchase business equipment.
+- Expand to a second location.
+- Reduce business debt.
+- Buy a home.
+- Fund a child's education.
+- Build retirement savings.
+
+Goal fields:
+
+- Goal name.
+- Goal owner.
+- Category.
+- Target amount.
+- Current funded amount.
+- Start date.
+- Target date.
+- Priority.
+- Monthly contribution.
+- Responsible advisor.
+- Linked financial plan.
+- Status.
+- Progress calculation.
+- Notes.
+- Milestones.
+
+The system must calculate percentage progress.
+
+Show goal progress prominently using visual progress bars.
+
+Distinguish funded progress from projected progress.
+
+A client must not be able to claim progress merely by editing a displayed percentage.
+
+Provide an evidence-based progress calculation and a separate manually entered progress mechanism with clear attribution.
+
+Advisors should be able to create, edit, review, and publish goals.
+
+Clients may propose goals, subject to the configured permissions.
+
+==================================================
+13. PROFESSIONAL COLLABORATION
+==================================================
+
+Build communication workflows connecting the client, accountant, and financial advisor.
+
+Include:
+
+- Document requests.
+- Missing-information requests.
+- Accountant review notes.
+- Advisor recommendations for planning actions.
+- Client responses.
+- Task assignments.
+- Status changes.
+- Internal notes.
+- Client-visible notes.
+- Notifications.
+- Activity history.
+
+Clearly separate internal professional notes from client-visible messages.
+
+Sensitive accounting or personal financial information must not automatically become visible to every professional associated with a client.
+
+Do not expose private advisory notes to unrelated accounting users.
+
+Implement a realistic demonstration of a shared client timeline.
+
+==================================================
+14. SUPERADMIN AND FIRM ADMIN
+==================================================
+
+Provide a complete administration workspace.
+
+SUPERADMIN
+
+- SaaS organizations.
+- Accounting firms.
+- Financial advisory firms.
+- Client organizations.
+- Users.
+- Roles.
+- Permission catalog.
+- Organization assignments.
+- System status.
+- Demo data reset.
+- Audit activity.
+
+FIRM ADMIN
+
+- Assigned clients.
+- Firm professionals.
+- Client onboarding.
+- User invitations.
+- Accountant assignments.
+- Advisor assignments.
+- Workload.
+- Documents pending review.
+- Tax declaration pipeline.
+- Financial plan pipeline.
+
+Role creation and editing must be interactive.
+
+The demo must include both:
+- An accounting firm administrator.
+- A platform superadministrator.
+
+Do not give firm administrators global superadmin privileges.
+
+==================================================
+15. UX/UI DESIGN SYSTEM
+==================================================
+
+Create a premium European B2B fintech visual identity.
+
+The product must feel:
+
+- Modern.
+- Professional.
+- Trustworthy.
+- Elegant.
+- Financially sophisticated.
+- Easy to understand.
+- Calm and efficient.
+
+Avoid visual imitation of traditional accounting software.
+
+Use:
+
+- Strong information hierarchy.
+- Spacious responsive layouts.
+- High-quality typography.
+- Consistent spacing.
+- Subtle surfaces and dividers.
+- Clear tables.
+- Interactive charts.
+- Well-designed status labels.
+- Thoughtful empty states.
+- Helpful validation messages.
+- Accessible controls.
+- Consistent modal and drawer patterns.
+
+Desktop layouts should support professional operational density.
+
+Mobile layouts should prioritize touch targets, navigation clarity, and critical actions.
+
+No horizontal page overflow.
+
+Large tables must adapt using cards, horizontal table containers, or responsive detail views.
+
+Support light and dark modes.
+
+Use a cohesive navy, blue, teal, and neutral palette.
+
+Avoid excessive decorative gradients and dashboard clutter.
+
+Use real, coherent Spanish interface copy.
+
+All client-facing text must be in Spanish.
+
+Dates must use Spanish formatting.
+
+Currency must default to EUR.
+
+Use appropriate decimal and thousands separators.
+
+Support accessibility principles aligned with WCAG 2.2 AA where practical.
+
+==================================================
+16. FRONTEND AND DEPLOYMENT ARCHITECTURE
+==================================================
+
+Frontend:
+- React.
+- TypeScript.
+- Vite.
+- Responsive CSS.
+- PWA architecture.
+- Vercel-compatible deployment.
+
+Production backend target:
+- PHP 8.x, subject to Bluehost environment verification.
+- MySQL database on Bluehost.
+- Authenticated JSON REST API.
+- Private document storage.
+- Server-side tenant authorization.
+- Audit logs.
+
+Do not create a separate Node.js backend.
+
+Do not introduce Supabase, Firebase, external database services, additional paid infrastructure, microservices, or message brokers without explicit approval.
+
+Before proposing production backend implementation, verify:
+
+- Bluehost PHP version.
+- MySQL version.
+- SSH availability.
+- Cron availability.
+- Private storage support.
+- File upload limits.
+- Available extensions.
+- HTTPS configuration.
+- Existing server capabilities.
+
+The first AI Studio MVP must work without requiring deployment of a production backend.
+
+Create a clear repository structure separating:
+
+src/app
+src/components
+src/features
+src/domain
+src/services
+src/data
+src/hooks
+src/styles
+src/types
+
+Use feature-oriented modules.
+
+Apply SOLID principles pragmatically.
+
+Favor:
+- Single responsibility.
+- Clear interfaces.
+- Dependency inversion at external service boundaries.
+- Domain separation.
+- Reusable UI components.
+- Testable business logic.
+
+Avoid needless abstraction and overengineering.
+
+==================================================
+17. DATA MODEL
+==================================================
+
+Design a relational domain model supporting:
+
+organizations
+organization_types
+users
+memberships
+roles
+permissions
+role_permissions
+professional_assignments
+client_profiles
+documents
+document_versions
+document_extractions
+document_reviews
+contacts
+customers
+suppliers
+invoices
+invoice_lines
+invoice_payments
+accounting_periods
+chart_of_accounts
+journal_entries
+journal_entry_lines
+vat_records
+tax_obligations
+tax_model_registry
+tax_declarations
+tax_declaration_versions
+bank_accounts
+bank_imports
+bank_transactions
+reconciliations
+financial_profiles
+financial_assets
+financial_liabilities
+financial_goals
+financial_goal_contributions
+financial_plans
+financial_scenarios
+plan_publications
+tasks
+messages
+notifications
+audit_events
+
+The initial implementation may use TypeScript objects with relationships modeled by stable IDs.
+
+Create the database schema specification for later PHP/MySQL implementation.
+
+Do not pretend a local browser data store provides production-grade isolation or security.
+
+Every production-facing tenant-owned record must have appropriate ownership and authorization relationships.
+
+Do not include unnecessary personal details in the demo data.
+
+==================================================
+18. SYNTHETIC DEMO DATA
+==================================================
+
+Create coherent sample data representing at least:
+
+CLIENT A:
+VEGEN Digital SL
+Digital consulting business.
+Service revenue, supplier invoices, operational expenses, bank accounts, tax obligations, and growth goals.
+
+CLIENT B:
+A small Spanish hospitality company.
+More frequent invoices, operational expenses, employee-related accounting considerations, and equipment investment goals.
+
+CLIENT C:
+A self-employed professional.
+Business income, expenses, tax obligations, and personal savings goals.
+
+CLIENT D:
+A private individual.
+Income, household expenses, savings, debt, personal assets, and long-term goals.
+
+Use fictional identities and fictional tax identifiers clearly marked as test data.
+
+Do not reproduce personal identifiers or financial records from any screenshot.
+
+The screenshot references contain information about real entities and persons. Treat them as design references only.
+
+Include at least:
+
+- 30 supplier invoices.
+- 25 customer invoices.
+- 80 bank transactions.
+- 20 accounting journal entries.
+- Several tax obligation examples.
+- 4 financial plans.
+- 10 goals.
+- Multiple document review exceptions.
+- Several reconciliation exceptions.
+
+All values must be logically connected.
+
+The same transaction must have consistent identity and amounts wherever it appears.
+
+Do not independently hardcode different totals into dashboards.
+
+Generate reports from shared domain data.
+
+==================================================
+19. DEMO PERSONAS AND ENTRY POINT
+==================================================
+
+Create a polished demo entry screen.
+
+Allow selecting:
+
+- Platform Superadmin.
+- Accounting Firm Administrator.
+- Accountant.
+- Financial Advisor.
+- Company Administrator.
+- Client Collaborator.
+- Self-employed Client.
+- Individual Client.
+
+These are demo personas, not real authenticated accounts.
+
+Switching personas must update:
+
+- Navigation.
+- Organization context.
+- Available data.
+- Accessible screens.
+- Available actions.
+
+Show a persistent but unobtrusive indicator:
+"ENTORNO DEMOSTRACIÓN".
+
+Do not confuse persona switching with production authentication.
+
+==================================================
+20. REQUIRED END-TO-END DEMO JOURNEYS
+==================================================
+
+JOURNEY 1 — DOCUMENT TO ACCOUNTING
+
+Client uploads a supplier invoice.
+
+The system extracts structured data.
+
+The accountant reviews and corrects it.
+
+The accountant approves a balanced journal entry.
+
+The transaction appears in the accounting workspace.
+
+The relevant dashboard metrics update.
+
+JOURNEY 2 — ACCOUNTING TO TAX
+
+The accountant selects a tax period.
+
+The system identifies applicable demo obligations.
+
+It calculates a simplified VAT draft using validated records.
+
+The accountant reviews the draft.
+
+The document becomes ready for external filing.
+
+No actual submission occurs.
+
+JOURNEY 3 — BANK TO TREASURY
+
+The client imports a bank statement.
+
+Transactions are parsed.
+
+Reconciliation candidates appear.
+
+The accountant validates selected matches.
+
+Balances and cash flow views update.
+
+JOURNEY 4 — TREASURY TO FINANCIAL PLANNING
+
+The financial advisor opens a client profile.
+
+The advisor reviews accounting and cash flow information within authorized scope.
+
+The advisor defines a financial goal.
+
+The system calculates available savings capacity from transparent assumptions.
+
+The advisor creates three scenarios.
+
+The advisor publishes a financial plan.
+
+The client views the plan and goal progress.
+
+JOURNEY 5 — ADMINISTRATION AND PERMISSIONS
+
+The superadmin creates a custom role.
+
+The superadmin configures its permissions.
+
+An administrator assigns it to a demo user.
+
+The user switches into the assigned persona.
+
+The app enforces the configured interface capabilities.
+
+JOURNEY 6 — CLIENT COMMUNICATION
+
+The accountant requests a missing document.
+
+The client sees the request in the PWA.
+
+The client uploads a document.
+
+The accountant reviews it.
+
+The request status updates for both parties.
+
+==================================================
+21. QUALITY AND TESTING
+==================================================
+
+Provide automated checks for essential domain invariants.
+
+At minimum:
+
+- Journal entries balance.
+- VAT calculations are internally consistent.
+- Invoice totals reconcile with line totals.
+- Bank imports reject duplicate rows.
+- Reconciliation does not double-count transactions.
+- Financial goal progress is calculated correctly.
+- Role permissions restrict relevant actions.
+- Tenant context restricts accessible data.
+- Navigation works across personas.
+- Prototype state remains coherent.
+
+Check responsive layouts at approximately:
+
+375px
+768px
+1024px
+1440px
+
+Every primary screen must have:
+
+- Loading state where needed.
+- Empty state.
+- Error state.
+- Useful actions.
+- Clear navigation.
+- Functional filters when shown.
+- Real interaction rather than decorative controls.
+
+Do not mark a feature complete when its buttons do nothing.
+
+Clearly distinguish functional, simulated, and unavailable features.
+
+==================================================
+22. IMPLEMENTATION ORDER
+==================================================
+
+Build in small, demonstrable increments.
+
+STAGE 1:
+Application foundation, navigation, design system, demo personas, centralized data model, and role-aware routing.
+
+STAGE 2:
+Client PWA, document upload, document queue, and accountant review workflows.
+
+STAGE 3:
+Accounting workspace, journal entries, VAT books, reporting, and simplified tax draft workflow.
+
+STAGE 4:
+Bank transaction import, reconciliation, liquidity dashboard, and cash flow views.
+
+STAGE 5:
+Financial advisor workspace, profiles, goals, financial plans, scenarios, and publishing.
+
+STAGE 6:
+Administration, messaging, audit views, reporting refinements, responsive QA, and complete cross-role workflows.
+
+Do not implement all modules as disconnected static screens.
+
+Complete shared foundation and at least one fully working cross-role journey before broadening the remaining modules.
+
+Maintain a visible feature status registry.
+
+Every module must indicate whether it is:
+
+FUNCTIONAL_DEMO
+SIMULATED_INTEGRATION
+PLANNED
+BLOCKED
+
+==================================================
+23. ACCEPTANCE CRITERIA
+==================================================
+
+The MVP is acceptable when:
+
+1. All principal client, accountant, financial advisor, and admin screens are accessible.
+
+2. The application is responsive and comfortable on a mobile phone.
+
+3. The client PWA offers an effortless document submission experience.
+
+4. At least one complete document-to-accounting-to-tax workflow works with consistent synthetic data.
+
+5. At least one bank-to-treasury reconciliation workflow works.
+
+6. At least one accounting-and-treasury-to-financial-plan workflow works.
+
+7. Published financial plans are visible to the corresponding client persona.
+
+8. Role-specific permissions have observable effects.
+
+9. The system clearly labels simulations and prevents real-world operations.
+
+10. The application builds successfully for Vercel.
+
+11. There are no dead primary navigation links or misleading success confirmations.
+
+12. Stakeholders can understand the integrated value proposition without developer assistance.
+
+==================================================
+24. FINAL DELIVERABLES
+==================================================
+
+Provide:
+
+A. Working React/TypeScript application.
+
+B. Complete navigation structure.
+
+C. Client PWA interface.
+
+D. Accounting and tax professional interface.
+
+E. Financial advisor interface.
+
+F. Superadmin and firm administration interface.
+
+G. Centralized synthetic demonstration dataset.
+
+H. Domain model description.
+
+I. Draft MySQL schema for future implementation.
+
+J. Documented API interface requirements for future PHP backend.
+
+K. Feature completion matrix.
+
+L. Known limitations and missing compliance functionality.
+
+M. Stakeholder demonstration walkthrough.
+
+N. Vercel deployment configuration.
+
+O. Practical verification instructions.
+
+IMPORTANT FINAL INSTRUCTION
+
+Do not stop after generating a proposal, sitemap, or static mockup.
+
+Implement the application.
+
+However, prioritize completion of working user journeys over breadth.
+
+If the entire requested scope cannot be completed in one implementation pass, deliver the strongest working increment, identify the remaining modules, and do not claim incomplete functionality is ready.
+
+Keep the interface in Spanish.
+
+Use English for source code comments, technical documentation, and internal development instructions.
+
+The goal is a credible, interactive, stakeholder-ready financial platform MVP — not a superficial dashboard showcase.
