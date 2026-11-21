@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  AlertTriangle,
   ArrowRight,
   Building2,
   Calculator,
@@ -53,111 +52,30 @@ export const DemoEntryScreen: React.FC<DemoEntryScreenProps> = ({ onEnterWorkspa
         </div>
       </header>
 
-      {/* Main Centered Split Login */}
-      <main className="mx-auto flex w-full max-w-6xl flex-1 items-center px-4 py-8 sm:px-8 lg:py-12">
-        <div className="grid w-full grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
-          {/* Left: Product Positioning & Domain Architecture */}
-          <div className="space-y-6 lg:col-span-7">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#228B22] dark:text-[#28C76F]">
-                Ingeniería financiera y cumplimiento para España
-              </p>
-              <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl text-balance">
-                Vegen Finance Hub
-              </h1>
-              <p className="mt-3 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
-                Plataforma operativa unificada que conecta el portal documental del cliente, la
-                contabilidad PGC y fiscalidad del despacho, la tesorería bancaria y la
-                planificación financiera patrimonial en un único entorno trazable.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
-                <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
-                <div className="text-xs">
-                  <div className="font-semibold text-slate-900 dark:text-slate-100">
-                    Portal del Cliente / PWA
-                  </div>
-                  <div className="mt-0.5 text-slate-600 dark:text-slate-400">
-                    Liquidez disponible, subida rápida de documentos, metas y plan publicado.
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
-                <Calculator className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
-                <div className="text-xs">
-                  <div className="font-semibold text-slate-900 dark:text-slate-100">
-                    Gestoría Contable y Fiscal
-                  </div>
-                  <div className="mt-0.5 text-slate-600 dark:text-slate-400">
-                    Revisión IA, asientos PGC cuadrados, conciliación bancaria y borrador 303.
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
-                <Compass className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
-                <div className="text-xs">
-                  <div className="font-semibold text-slate-900 dark:text-slate-100">
-                    Asesoría Financiera
-                  </div>
-                  <div className="mt-0.5 text-slate-600 dark:text-slate-400">
-                    Diagnóstico, separación empresa/personal, 3 escenarios y publicación al cliente.
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
-                <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
-                <div className="text-xs">
-                  <div className="font-semibold text-slate-900 dark:text-slate-100">
-                    Gobernanza RBAC y Auditoría
-                  </div>
-                  <div className="mt-0.5 text-slate-600 dark:text-slate-400">
-                    Roles configurables en vivo, aislamiento multi-cliente y registro de auditoría.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
-              <span>{state.clientProfiles.length} perfiles cliente demo</span>
-              <span aria-hidden="true">·</span>
-              <span>{state.invoices.length} facturas</span>
-              <span aria-hidden="true">·</span>
-              <span>{state.journalEntries.length} asientos PGC</span>
-              <span aria-hidden="true">·</span>
-              <span>{state.personas.length} personas evaluables desde la cabecera</span>
-            </div>
+      {/* Main Stacked Login Layout */}
+      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center px-4 py-8 sm:px-8 lg:py-12">
+        <div className="flex w-full flex-col items-center space-y-8">
+          {/* 1. Main Heading, 2. Product Title, 3. Existing Product Description */}
+          <div className="w-full max-w-2xl text-center">
+            <h1 className="font-display text-sm font-semibold tracking-wide text-[#228B22] dark:text-[#28C76F] sm:text-base">
+              Ingeniería financiera y cumplimiento fiscal
+            </h1>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl text-balance">
+              Vegen Finance Hub
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
+              Plataforma operativa unificada que conecta el portal documental del cliente, la
+              contabilidad PGC y fiscalidad del despacho, la tesorería bancaria y la
+              planificación financiera patrimonial en un único entorno trazable.
+            </p>
           </div>
 
-          {/* Right: Demo Login Card */}
-          <div className="lg:col-span-5">
+          {/* 4. Demo Login Box */}
+          <div className="w-full max-w-md">
             <Panel padding="lg" className="shadow-sm">
-              <div className="mb-6">
-                <VegenLogo size="md" />
-                <h2 className="mt-5 font-display text-xl font-semibold text-slate-900 dark:text-slate-50">
-                  Acceso de demostración
-                </h2>
-                <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
-                  Introduce cualquier dato de prueba o deja los campos vacíos para acceder directamente al entorno interactivo.
-                </p>
-              </div>
-
-              {/* Explicit Demo Security Disclaimer */}
-              <div
-                role="note"
-                className="mb-5 flex items-start gap-2.5 rounded-xl border border-amber-300/80 bg-amber-50/80 p-3.5 text-xs text-amber-950 dark:border-amber-800/70 dark:bg-amber-950/35 dark:text-amber-200"
-              >
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
-                <div className="leading-relaxed">
-                  <strong>Mecanismo de acceso solo para demostración (MVP):</strong> no es una
-                  autenticación de producción, no valida credenciales reales ni protege datos
-                  privados. Todos los registros mostrados son sintéticos.
-                </div>
-              </div>
+              <h3 className="mb-5 font-display text-xl font-semibold text-slate-900 dark:text-slate-50">
+                Acceso demo
+              </h3>
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <label className="block text-xs">
@@ -198,7 +116,7 @@ export const DemoEntryScreen: React.FC<DemoEntryScreenProps> = ({ onEnterWorkspa
                   type="submit"
                   className="mt-2 inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-[#1E293B] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#228B22] focus-visible:outline-2 focus-visible:outline-[#228B22] dark:bg-[#228B22] dark:hover:bg-[#28C76F]"
                 >
-                  <span>Iniciar sesión (Modo Demo)</span>
+                  <span>Iniciar Sesión</span>
                   <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </button>
               </form>
@@ -209,6 +127,67 @@ export const DemoEntryScreen: React.FC<DemoEntryScreenProps> = ({ onEnterWorkspa
                 Superadministrador.
               </p>
             </Panel>
+          </div>
+
+          {/* 5. Four Feature Cards — Portal, Asesoría, Gestoría, Gobernanza */}
+          <div className="grid w-full max-w-3xl grid-cols-1 gap-3 sm:grid-cols-2">
+            <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
+              <Building2 className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
+              <div className="text-xs">
+                <div className="font-semibold text-slate-900 dark:text-slate-100">
+                  Portal del Cliente / PWA
+                </div>
+                <div className="mt-0.5 text-slate-600 dark:text-slate-400">
+                  Liquidez disponible, subida rápida de documentos, metas y plan publicado.
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
+              <Compass className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
+              <div className="text-xs">
+                <div className="font-semibold text-slate-900 dark:text-slate-100">
+                  Asesoría Financiera
+                </div>
+                <div className="mt-0.5 text-slate-600 dark:text-slate-400">
+                  Diagnóstico, separación empresa/personal, 3 escenarios y publicación al cliente.
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
+              <Calculator className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
+              <div className="text-xs">
+                <div className="font-semibold text-slate-900 dark:text-slate-100">
+                  Gestoría Contable y Fiscal
+                </div>
+                <div className="mt-0.5 text-slate-600 dark:text-slate-400">
+                  Revisión IA, asientos PGC cuadrados, conciliación bancaria y borrador 303.
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-3.5 dark:border-slate-800 dark:bg-slate-900">
+              <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#228B22] dark:text-[#28C76F]" />
+              <div className="text-xs">
+                <div className="font-semibold text-slate-900 dark:text-slate-100">
+                  Gobernanza RBAC y Auditoría
+                </div>
+                <div className="mt-0.5 text-slate-600 dark:text-slate-400">
+                  Roles configurables en vivo, aislamiento multi-cliente y registro de auditoría.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+            <span>{state.clientProfiles.length} perfiles cliente demo</span>
+            <span aria-hidden="true">·</span>
+            <span>{state.invoices.length} facturas</span>
+            <span aria-hidden="true">·</span>
+            <span>{state.journalEntries.length} asientos PGC</span>
+            <span aria-hidden="true">·</span>
+            <span>{state.personas.length} personas evaluables desde la cabecera</span>
           </div>
         </div>
       </main>
