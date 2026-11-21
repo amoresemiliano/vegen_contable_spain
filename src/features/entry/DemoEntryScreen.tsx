@@ -57,10 +57,10 @@ export const DemoEntryScreen: React.FC<DemoEntryScreenProps> = ({ onEnterWorkspa
         <div className="flex w-full flex-col items-center space-y-8">
           {/* 1. Main Heading, 2. Product Title, 3. Existing Product Description */}
           <div className="w-full max-w-2xl text-center">
-            <h1 className="font-display text-sm font-semibold tracking-wide text-[#228B22] dark:text-[#28C76F] sm:text-base">
+            <h1 className="font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl text-balance">
               Ingeniería financiera y cumplimiento fiscal
             </h1>
-            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-50 sm:text-4xl text-balance">
+            <h2 className="mt-2.5 font-display text-xl font-bold tracking-tight text-[#228B22] dark:text-[#28C76F] sm:text-2xl">
               Vegen Finance Hub
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-slate-600 dark:text-slate-300 sm:text-base">
